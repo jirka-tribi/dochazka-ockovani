@@ -11,11 +11,14 @@ import (
 	"time"
 )
 
+var BuildTime = time.Now().String()
+var BuildVersion = "1.0.0"
+
 //go:embed ico.png
-var icon embed.FS
+var iconFile embed.FS
 
 func getIcon() image.Image {
-	dataBytes, _ := icon.ReadFile("ico.png")
+	dataBytes, _ := iconFile.ReadFile("ico.png")
 	dataReader := bytes.NewReader(dataBytes)
 	imageIcon, _ := png.Decode(dataReader)
 	return imageIcon
@@ -59,7 +62,7 @@ func main() {
 
 	icon, _ := walk.NewIconFromImageForDPI(getIcon(), 64)
 
-	if err := (MainWindow{
+	if err = (MainWindow{
 		AssignTo: &mainWindow.MainWindow,
 		Title:    "Dochazka",
 		Icon:     icon,
@@ -72,7 +75,7 @@ func main() {
 					Action{
 						Text: "E&xit",
 						OnTriggered: func() {
-							err := mainWindow.Close()
+							err = mainWindow.Close()
 							if err != nil {
 								return
 							}
@@ -86,7 +89,12 @@ func main() {
 					Action{
 						Text: "About",
 						OnTriggered: func() {
-							walk.MsgBox(mainWindow, "About", "Developed by Jiri Tribula", walk.MsgBoxIconInformation)
+							walk.MsgBox(
+								mainWindow,
+								"About",
+								"Developed by Jiri Tribula"+"\n"+"Verze: "+BuildVersion+"\n"+"Sestaveno: "+BuildTime,
+								walk.MsgBoxIconInformation,
+							)
 						},
 					},
 				},
@@ -124,8 +132,12 @@ func main() {
 						Alignment: AlignHFarVCenter,
 						OnClicked: func() {
 							yearInt, _ := strconv.Atoi(year.Text())
-							genPdf(yearInt, monthName.CurrentIndex()+1, monthName.Text())
-							walk.MsgBox(mainWindow, "Done", "Hotovo: "+monthName.Text()+".pdf", walk.MsgBoxIconInformation)
+							err = genPdf(yearInt, monthName.CurrentIndex()+1, monthName.Text())
+							if err == nil {
+								walk.MsgBox(mainWindow, "Done", "Hotovo: "+monthName.Text()+"_"+year.Text()+".pdf", walk.MsgBoxIconInformation)
+							} else {
+								walk.MsgBox(mainWindow, "Done", "Generovaní selhalo", walk.MsgBoxIconError)
+							}
 						},
 					},
 				},
