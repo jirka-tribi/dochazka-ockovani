@@ -186,7 +186,7 @@ func genPdf(year int, monthIndex int, monthName string) error {
 
 	yToFill = yToFill + hHeadColumn
 	pdf.Line(xLeftStart, yToFill, xRightStart, yToFill)
-	fillAlignCell(&pdf, xLeftStart, yToFill, xLeftStartAfterFirst+3*wColumn, hColumn, "Převod z minulého měsíce", centerAlign)
+	fillAlignCell(&pdf, xLeftStart, yToFill, wColumnFirst+3*wColumn, hColumn, "Převod z minulého měsíce", centerAlign)
 
 	xToFillNum := xLeftStartAfterFirst + 4*wColumn
 	for i := 1; i <= 9; i++ {
@@ -257,11 +257,11 @@ func genPdf(year int, monthIndex int, monthName string) error {
 	yToFill = yToFill + hColumn
 	pdf.SetLineWidth(thinkLine)
 	pdf.Line(xLeftStart, yToFill, xRightStart, yToFill)
-	fillAlignCell(&pdf, xLeftStart+5, yToFill, 200, 2*hColumn, "Zaměstnanec", leftAlign)
+	fillAlignCell(&pdf, xLeftStart+5, yToFill, 200, 2*hColumn, "Zaměstnanec:", leftAlign)
 
 	yToFill = yToFill + 2*hColumn
 	pdf.Line(xLeftStart, yToFill, xRightStart, yToFill)
-	fillAlignCell(&pdf, xLeftStart+5, yToFill, 200, 2*hColumn, "Vedoucí", leftAlign)
+	fillAlignCell(&pdf, xLeftStart+5, yToFill, 200, 2*hColumn, "Vedoucí:", leftAlign)
 	fillAlignCell(&pdf, xLeftStartAfterFirst+5*wColumn+5, yToFill, 3*wColumn, 2*hColumn, "Personální oddělení:", leftAlign)
 	pdf.Line(xLeftStartAfterFirst+5*wColumn, yToFill, xLeftStartAfterFirst+5*wColumn, yToFill+2*hColumn)
 
